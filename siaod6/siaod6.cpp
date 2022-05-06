@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <algorithm>
+#include<iomanip>
 #include "List.h"
 
 using namespace std;
@@ -20,20 +21,27 @@ int main()
             if (c == 1) {//выюран ручной ввод
                 l1.create_list();
             }
-            //else {//выбрана автоматическая генерация
-            //    int a[7] = { 23, 15, 64, 1, 88, 32, 90 };
-            //    cout << "Preset elements: ";
-            //    for (int i = 0; i < 7; i++)
-            //    {
-            //        cout << a[i] << " ";
-            //        l1.push(a[i]);
-            //    }
-            //    cout << "\nList generated\n";
-            //}
+            else {//выбрана автоматическая генерация
+                int way[7] = { 23, 15, 64, 1, 88, 32, 23 };
+                int time[7] = { 1, 2, 3, 4, 5, 6, 7 };
+                string num[7] = { "a123aa","b234bb","c345cc","d456dd","e567ee","f678ff","a123aa" };
+                double price[7] = { 10, 20, 30, 40, 50, 60, 70 };
+                string date[7] = { "mn","tu","wd","th","fr","str","mn"};
+                cout << "Preset elements: \n";
+                cout << setw(10) << left << "way " << setw(10) << "time " << setw(10) << "num " << setw(10) << "price " << setw(10) << "date " << endl;
+                bool f = true;
+                for (int i = 0; i < 7; i++)
+                {
+                    cout << setw(10) << way[i] << setw(10) << time[i] << setw(10) << num[i] << setw(10) << price[i] << setw(10) << date[i] << endl;
+                    if (f) l1.push_back(way[i],time[i],num[i],price[i],date[i]);
+                    else l1.push(way[i], time[i], num[i], price[i], date[i],num[i]);
+                }
+                cout << "\nList generated\n";
+            }
             length = 1;
             cout << "Input command:\nPrint list - 1\nReverse print list - 2\
                 \nRemove values by key - 3\nPush element - 4\
-                \nCount times - 5\nPush element back - 6\nExit - 0\n";
+                \nCount times - 5\nExit - 0\n";
         }
         else {
             cout << "Command: "; cin >> c;
@@ -54,16 +62,11 @@ int main()
                 cin >> w >> t >> nm >> p >> d;
                 l1.push(w, t, nm, p, d, nm);
                 break;
-            case 5://вызов функции проверки l2 на упорядоченность по возрастанию
-                
-                break;
-            case 6://вызов функции добаления элемента в конец
-                /*cout << "Enter element: "; cin >> k;
-                if (c == 1) l1.push_back(k);
-                else if (c == 2) l2.push_back(k);*/
-                break;
-            case 7://вызов функции добавления элемента в начало
-                
+            case 5://вызов функции подсечта выходов на маршрут
+                cout << "Enter key: "; cin >> k;
+                cout << "Enter date: "; cin >> d;
+                cout << "Enter way (int): "; cin >> w;
+                cout << "Bus has gone: " << l1.count_ways(k, d, w) << " times" << endl;
                 break;
             case 0:
                 return 0;

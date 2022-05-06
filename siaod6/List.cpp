@@ -35,42 +35,30 @@ void list::push_back(int w, int t, string n, double p, string d)//добавление эле
     tmp->prev = last;
     last = tmp;//переопределяем последний элемент списка
 }
-//
-//void list::push_front(int n)
-//{
-//    node* p = new node(n);
-//    if (is_empty()) {
-//        first = p;
-//        last = p;
-//        return;
-//    }
-//    p->next = first;
-//    first = p;
-//}
 
 void list::push(int w, int t, string n, double p, string d, string place)
-{
-    if (is_empty()) {
+{//вставка элемента в список после последнего с заданным номером
+    if (is_empty()) {//если пусто
         node* tmp = new node(w, t, n, p, d);
-        first = tmp;
+        first = tmp;//созданный элемент и первый, и последний
         last = tmp;
         return;
     }
     else {
-        node* pl = find(place);
-        if (pl!=nullptr && pl->next != nullptr) {
+        node* pl = find(place);//ищем в списке эелемент с таким же номером
+        if (pl!=nullptr && pl->next != nullptr) {//если элемент нашелся и не последний
             node* tmp = new node(w, t, n, p, d, pl->next, pl);
-            pl->next->prev = tmp;
+            pl->next->prev = tmp;//связываем указатели
             pl->next = tmp;
         }
-        else if (pl!= nullptr) {
+        else if (pl!= nullptr) {//если нашелся и последний
             node* tmp = new node(w, t, n, p, d,nullptr, pl);
-            pl->next = tmp;
+            pl->next = tmp;//связываем указатели
             last = tmp;
             return;
         }
-        else {
-            push_back(w, t, n, p, d);
+        else {//если не нашелся
+            push_back(w, t, n, p, d);//вставляем в конец
         }
     }
 }
@@ -79,18 +67,20 @@ void list::print()//вывод списка
 {
     if (is_empty()) return;//если пуст, то ничего печатать не нужно
     node* p = first;//создание нового элемента
+    cout << setw(10) << left << "way " << setw(10) << "time " << setw(10) << "num " << setw(10) << "price " << setw(10) << "date " << endl;
     while (p) {//цикл для прохода по циклу
-        cout << p->way << " " << p->time << " " << p->num << " " << p->price << " " << p->date << endl;//вывод очередного элемента
+        cout << setw(10) << p->way << setw(10) << p->time << setw(10) << p->num << setw(10) << p->price << setw(10) << p->date << endl;//вывод очередного элемента
         p = p->next;
     }
 }
 
-void list::print_r()//вывод списка
+void list::print_r()//вывод списка с конца
 {
     if (is_empty()) return;//если пуст, то ничего печатать не нужно
     node* p = last;//создание нового элемента
+    cout << setw(10) << left <<  "way " << setw(10) << "time " << setw(10) << "num " << setw(10) << "price " << setw(10) << "date " << endl;
     while (p) {//цикл для прохода по циклу
-        cout << p->way << " " << p->time << " " << p->num << " " << p->price << " " << p->date << endl;//вывод очередного элемента
+        cout << setw(10) << left << p->way << setw(10) << p->time << setw(10) << p->num << setw(10) << p->price << setw(10) << p->date << endl;//вывод очередного элемента
         p = p->prev;
     }
 }
@@ -109,56 +99,57 @@ void list::remove(string n)//удаление элемента по ключу
 //функция принимает в качестве параметра ключ элемента списка
 {
     if (is_empty()) return;//если пуст, то удалять нечего
-    if (first->num == n) {//удаление первого элемента
-        node* t = first;
-        first = first->next;//переопределение первого элемента списка
-        delete t;
-    }
-    else if (last->num == n) {//удаление последнего элемента
-        node* t = first;
-        while (t->next != last) t = t->next;//проход до предпоследнего элемента
-        delete last;//удаление последнего
-        t->next = nullptr;//переопределение указателя предпоследнего элемента
-        last = t;//переопределение последнего элемента
-    }
-    else {//удаление в чередине списка
-        node* now;
-        while(true) {
+    while (true) {
+        if (first->num == n) {//удаление первого элемента
+            node* t = first;
+            first->next->prev = nullptr;
+            first = first->next;//переопределение первого элемента списка
+            delete t;
+        }
+        else if (last->num == n) {//удаление последнего элемента
+            node* t = first;
+            while (t->next != last) t = t->next;//проход до предпоследнего элемента
+            delete last;//удаление последнего
+            t->next = nullptr;//переопределение указателя предпоследнего элемента
+            last = t;//переопределение последнего элемента
+        }
+        else {//удаление в чередине списка
+            node* now;
             now = find(n);//элемент перед удаляемым
             if (now == nullptr) {//если не нашли
-                cout << n << "no more" << endl;
+                cout << "All elements with key " << n << " deleted" << endl;
                 return;
             }
             now->next->prev = now->prev;
             now->prev->next = now->next;
-            delete now;          
+            delete now;
         }
     }
 }
 
-int list::count_ways(string n, string dat)
-{
+int list::count_ways(string n, string dat, int w)
+{//функция подсчета количества выходов автобуса 
+    //на маршрут в течение заданного дня
     int c = 0;
     node* p = first;
-    while (p) {
-        if (p->num == n && p->date == dat) c++;
+    while (p) {//цикл для прохода по списку
+        if (p->num == n && p->date == dat && p->way == w) c++;//если поля совпали с заданными, наакапливаем количесвто
         p = p->next;
     }
     return c;
 }
 
 void list::create_list()
-{
+{//функция ручного создания списка
     int n;
     cout << "Enter num of elements: ";
-    cin >> n;
+    cin >> n;//ввод количества элементов
     int w, t;
     string nm, d;
     double p;
-    for (int i = 0; i < n; i++) {
-        cin >> w >> t >> nm >> p >> d;
-        if (find(nm)==nullptr) push_back(w, t, nm, p, d);
-        else push(w, t, nm, p, d, nm);
+    for (int i = 0; i < n; i++) {//цикл для ввода элементов
+        cin >> w >> t >> nm >> p >> d;//ввод соответствующих элементов
+        push(w, t, nm, p, d, nm);//вставка элемента в список
     }
 }
 

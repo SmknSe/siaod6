@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include<string>
+#include<iomanip>
 using namespace std;
 class list {
     class node {
@@ -20,14 +21,12 @@ public:
     list();//конструктор
     bool is_empty();//проверка на пустоту списка
     void push_back(int, int, string, double, string);//вставка в конец списка
-    //void push_front(int);//вставка в начало списка
     void push(int,int,string,double,string,string);//вставка элемента в список с упорядочиванием
     void print();//вывод списка
     void print_r();//вывод списка с конца
     node* find(string);//поиск элемента по ключу
     void remove(string);//удаление элемента списка по ключу
-    //void remove_on_position(int);//удаление элемента на позиции
-    int count_ways(string, string);
+    int count_ways(string, string, int);
     void create_list();
     ~list();//деструктор
 };
